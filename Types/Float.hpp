@@ -1,18 +1,18 @@
-#ifndef INTEGER_H
-#define INTEGER_H
+#ifndef FLOAT_H
+#define FLOAT_H
 
 #include "Getable.hpp"
 
-class Integer: public Getable{
-    int m_data;
+class Float: public Getable{
+    float m_data;
 public:
-    Integer();
-    Integer(int number);
+    Float() = default;
+    Float(float number);
     Getable *Get(Getable *key = NULL) const override;
     std::string ToString() const override;
     std::string GetType() const override;
+    float GetNumber();
     bool IsEqual(Getable *value) const override;
-    int GetNumber();
 };
 
 #endif

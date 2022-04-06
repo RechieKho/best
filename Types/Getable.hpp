@@ -2,11 +2,16 @@
 #define GETABLE_H
 
 #include <string>
+#include <iostream>
 
-class Getable {
+#include "Cleaner.hpp"
+
+class Getable: public Cleanable{
 public:
-    virtual Getable *Get(Getable *key = NULL) = 0;
-    virtual std::string ToString() = 0;
+    virtual Getable *Get(Getable *key = NULL) const = 0;
+    virtual std::string ToString() const = 0;
+    virtual std::string GetType() const = 0;
+    virtual bool IsEqual(Getable *value) const = 0;
 };
 
 #endif

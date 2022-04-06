@@ -1,10 +1,15 @@
 #include <iostream>
-#include "Text.hpp"
 #include "Integer.hpp"
-
+#include "String.hpp"
+#include "Float.hpp"
+#include "Object.hpp"
+#include "Cleaner.hpp"
 
 int main(){
-    Text s = Text("length");
-    Integer *length = (Integer *) s.Get(&s);
-    std::cout << "Text contained: " << s.ToString() << "\nText's length: " << length->ToString() << std::endl;
+    Object *o = new Object();
+    std::cout << o->ToString() << std::endl;
+    o->Set(new String(), new Integer(2));
+    o->Set(new Integer(2), new String("NOOOO"));
+    std::cout << o->ToString() << std::endl;
+    Cleaner::Flush();
 }
