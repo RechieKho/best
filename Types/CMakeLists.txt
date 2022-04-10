@@ -1,15 +1,15 @@
 add_library(
     Types
 
-    Getable.hpp
+    BstObj.hpp
     String.hpp
     String.cpp
     Integer.hpp
     Integer.cpp
     Float.hpp
     Float.cpp
-    Array.hpp
-    Array.cpp
+    List.hpp
+    List.cpp
     Object.hpp
     Object.cpp
     )

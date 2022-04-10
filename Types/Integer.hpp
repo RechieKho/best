@@ -1,18 +1,20 @@
 #ifndef INTEGER_H
 #define INTEGER_H
 
-#include "Getable.hpp"
+#define INT(n) Integer(n)
 
-class Integer: public Getable{
-    int m_data;
+#include "BstObj.hpp"
+
+class Integer: public BstObj{
+    int num;
 public:
     Integer();
     Integer(int number);
-    Getable *Get(const Getable &key) const override;
-    Getable *Copy() const override;
+    BstObj *Get(const BstObj &key) const override;
+    BstObj *Copy() const override;
     std::string ToString() const override;
     std::string GetType() const override;
-    bool operator==(const Getable &value) const override;
+    bool operator==(const BstObj &value) const override;
 
     int ToNative() const;
 };

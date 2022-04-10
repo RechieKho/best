@@ -3,20 +3,20 @@
 
 #include <vector>
 
-#include "Getable.hpp"
-#include "Array.hpp"
+#include "BstObj.hpp"
+#include "List.hpp"
 #include "Cleaner.hpp"
 
 struct KeyValuePair{
-    const Getable *key;
-    Getable *value;
-    KeyValuePair(const Getable *key, Getable *value);
+    const BstObj *key;
+    BstObj *value;
+    KeyValuePair(const BstObj *key, BstObj *value);
     ~KeyValuePair();
 };
 
-class Object: public Getable{
-    std::vector<KeyValuePair *> *m_hash_arr;
-    int m_hash_arr_size;
+class Object: public BstObj{
+    std::vector<KeyValuePair *> *table;
+    int table_size;
 
     int hash(std::string text, int max_number) const;
 public:
@@ -24,13 +24,13 @@ public:
     Object(int arg, ...);
     ~Object();
 
-    Getable *Get(const Getable &key) const override;
-    Getable *Copy() const override;
+    BstObj *Get(const BstObj &key) const override;
+    BstObj *Copy() const override;
     std::string GetType() const override;
     std::string ToString() const override;
-    bool operator==(const Getable &value) const override;
+    bool operator==(const BstObj &value) const override;
     
-    void Set(const Getable &key, const Getable &value);
+    void Set(const BstObj &key, const BstObj &value);
 };
 
 #endif

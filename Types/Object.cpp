@@ -8,7 +8,7 @@
 #define MAX_TABLE_SIZE(hash_arr_size) MAX_VECTOR_SIZE*hash_arr_size
 #define EXPANDED_HASH_ARR_SIZE(hash_arr_size) hash_arr_size * 2
 
-KeyValuePair::KeyValuePair(const Getable *key, Getable *value): key(key), value(value) {
+KeyValuePair::KeyValuePair(const BstObj *key, BstObj *value): key(key), value(value) {
     key->ref_count++;
     value->ref_count++;
 }
@@ -19,62 +19,62 @@ KeyValuePair::~KeyValuePair(){
 }
 
 Object::Object()
-    : m_hash_arr_size(MIN_HASH_ARR_SIZE),
-    m_hash_arr((std::vector<KeyValuePair *> *)malloc(
+    : table_size(MIN_HASH_ARR_SIZE),
+    table((std::vector<KeyValuePair *> *)malloc(
         MIN_HASH_ARR_SIZE * sizeof(std::vector<KeyValuePair>)
     ))
 {
 }
 
 Object::Object(int n_args, ...)
-    : m_hash_arr_size(n_args? n_args * 2 : MIN_HASH_ARR_SIZE),
-    m_hash_arr((std::vector<KeyValuePair *> *)malloc(
+    : table_size(n_args? n_args * 2 : MIN_HASH_ARR_SIZE),
+    table((std::vector<KeyValuePair *> *)malloc(
        (n_args? n_args * 2 : MIN_HASH_ARR_SIZE) * sizeof(std::vector<KeyValuePair>)
     ))
 {
     for(
         int i = 0;
-        i < (m_hash_arr_size);
+        i < (table_size);
         i++
-    ) m_hash_arr[i] = std::vector<KeyValuePair *>();
+    ) table[i] = std::vector<KeyValuePair *>();
 
     va_list valist;
     va_start(valist, n_args);
     for(int i = 0; i < n_args; i++) {
         KeyValuePair *pair = va_arg(valist, KeyValuePair *);
-        m_hash_arr[hash(pair->key->ToString(), m_hash_arr_size)].push_back(pair);
+        table[hash(pair->key->ToString(), table_size)].push_back(pair);
     }
     va_end(valist);
 }
 
 Object::~Object(){
-    for(int i = 0; i < m_hash_arr_size; i++){
-        std::vector<KeyValuePair *> &pairs = m_hash_arr[i];
+    for(int i = 0; i < table_size; i++){
+        std::vector<KeyValuePair *> &pairs = table[i];
         for(int j = 0; j < pairs.size(); j++){
             delete pairs[j];
         }
     }
-    free(m_hash_arr);
+    free(table);
     Cleaner::Flush();
 }
 
 
-Getable *Object::Get(const Getable &key) const {
-    std::vector<KeyValuePair *> &pairs = m_hash_arr[hash(key.ToString(), m_hash_arr_size)];
+BstObj *Object::Get(const BstObj &key) const {
+    std::vector<KeyValuePair *> &pairs = table[hash(key.ToString(), table_size)];
     for(const KeyValuePair * const pair: pairs) if(*pair->key == key) return pair->value;
     return nullptr;
 }
 
-Getable *Object::Copy() const {
+BstObj *Object::Copy() const {
     return new Object(); // TODO
 }
 
-void Object::Set(const Getable &key, const Getable &value) {
+void Object::Set(const BstObj &key, const BstObj &value) {
     // copying
-    const Getable *copied_key = key.Copy();
-    Getable *copied_value = value.Copy();
+    const BstObj *copied_key = key.Copy();
+    BstObj *copied_value = value.Copy();
 
-    std::vector<KeyValuePair *> &pairs = m_hash_arr[hash(key.ToString(), m_hash_arr_size)];
+    std::vector<KeyValuePair *> &pairs = table[hash(key.ToString(), table_size)];
     for(KeyValuePair * const pair: pairs) if(*pair->key == key) {
         pair->value = copied_value; 
         return;
@@ -90,8 +90,8 @@ std::string Object::GetType() const {
 std::string Object::ToString() const {
     bool past_first_element = false;
     std::string repr = "{";
-    for(int i = 0; i<m_hash_arr_size; i++){
-        const std::vector<KeyValuePair *> &pairs = m_hash_arr[i];
+    for(int i = 0; i<table_size; i++){
+        const std::vector<KeyValuePair *> &pairs = table[i];
         int size = pairs.size();
         for(int j = 0; j < size; j++){
             if(past_first_element) repr += ", ";
@@ -111,12 +111,12 @@ std::string Object::ToString() const {
     return repr;
 }
 
-bool Object::operator==(const Getable &value) const{
+bool Object::operator==(const BstObj &value) const{
     if(value.GetType().compare("Object")) return false;
     else {
         const Object &o = (const Object&)value;
-        for(int i = 0; i<m_hash_arr_size; i++){
-            const std::vector<KeyValuePair *> &pairs = m_hash_arr[i];
+        for(int i = 0; i<table_size; i++){
+            const std::vector<KeyValuePair *> &pairs = table[i];
             for(int j = 0; j < pairs.size(); j++) if(o.Get(*(pairs[j]->key)) != pairs[j]->value) return false;
         }
     }
