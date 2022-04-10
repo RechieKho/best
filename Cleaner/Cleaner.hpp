@@ -5,7 +5,7 @@
 
 class Cleanable{
 public:
-    Cleanable();
+    void *operator new(size_t size);
     virtual ~Cleanable() = default;
     int ref_count;
 };

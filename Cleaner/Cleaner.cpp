@@ -2,8 +2,10 @@
 #include "Cleaner.hpp"
 #include <iostream>
 
-Cleanable::Cleanable(){
-    Cleaner::Register(this);
+void *Cleanable::operator new(size_t size){
+    void *p = malloc(size);
+    Cleaner::Register((Cleanable *)p);
+    return p;
 }
 
 std::vector<Cleanable *> Cleaner::items = std::vector<Cleanable *>();
