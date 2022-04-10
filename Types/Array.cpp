@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cstdarg>
 
+#include "String.hpp"
 #include "Array.hpp"
 #include "Integer.hpp"
 #include "Log.hpp"
@@ -10,7 +11,7 @@ Array::Array(int n_args, ...){
     va_list valist;
     va_start(valist, n_args);
     for (int i = 0; i < n_args; i++) {
-        Getable *e = va_arg(valist, Getable *);
+        Getable *e = va_arg(valist, Getable*);
         e->ref_count++;
         m_data.push_back(e);
         };
@@ -22,29 +23,35 @@ Array::~Array(){
     Cleaner::Flush();
 }
 
-const Getable *Array::Get(const Getable *key) const{
+Getable *Array::Get(const Getable &key) const{
     // checks
-    if(key->GetType().compare("Integer")){
-        return NULL; // print error message
+    if(key.GetType().compare("Integer")){
+        return nullptr; // print error message
     }
-    return m_data.at(((Integer *)key)->GetNumber());
+    return m_data[((Integer &)key).ToNative()];
 }
 
-void Array::Set(Getable *key, Getable *value){
+Getable *Array::Copy() const {
+    return new Array(); // TODO
+}
+
+void Array::Set(const Getable &key, const Getable &value){
     int index;
 
     // checks
-    if(key->GetType().compare("Integer")){
+    if(key.GetType().compare("Integer")){
         return; // print error message
     } 
-    else if((index = ((Integer *)key)->GetNumber()) < m_data.size()){
+    else if((index = ((Integer &)key).ToNative()) < m_data.size()){
         return; // print error message
     }
-    else if (m_data[index] == value) return;
+    else if (m_data[index] == &value) return;
+
+    Getable *copied_value = value.Copy();
 
     m_data[index]->ref_count--;
-    value->ref_count++;
-    m_data[index] = value;
+    copied_value->ref_count++;
+    m_data[index] = copied_value;
 }
 
 std::string Array::ToString() const{
@@ -64,8 +71,8 @@ std::string Array::GetType() const{
     return "Array";
 }
 
-bool Array::IsEqual(const Getable *value) const{
-    return !value->GetType().compare("Array") && ((Array *)value)->m_data == m_data;
+bool Array::operator==(const Getable &value) const{
+    return !value.GetType().compare("Array") && ((Array &)value).m_data == m_data;
 }
 
 void Array::PushBack(Getable *value){
@@ -79,11 +86,15 @@ void Array::PopBack(){
 }
 
 struct ArrayContainChecker{
-    Getable *value;
-    ArrayContainChecker(Getable *i) : value(i) {}
-    bool operator()(Getable *i) {return value->IsEqual(i);}
+    const Getable &value;
+    ArrayContainChecker(const Getable &i) : value(i) {}
+    bool operator()(Getable *i) {return value == *i;}
 };
-bool Array::Contains(Getable *value) const{
+bool Array::Contains(const Getable &value) const{
     struct ArrayContainChecker c(value);
     return std::find_if(m_data.begin(), m_data.end(), c) != m_data.end();
+}
+
+std::vector<Getable*> Array::ToNative() const{
+    return m_data;
 }

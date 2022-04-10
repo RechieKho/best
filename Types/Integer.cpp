@@ -1,3 +1,4 @@
+#include "String.hpp"
 #include "Integer.hpp"
 #include "Cleaner.hpp"
 
@@ -9,8 +10,12 @@ Integer::Integer(int number)
     : m_data(number) 
 {}
 
-const Getable *Integer::Get(const Getable *key) const{
+Getable *Integer::Get(const Getable &key) const{
     return nullptr;
+}
+
+Getable *Integer::Copy() const {
+    return new Integer(m_data);
 }
 
 std::string Integer::ToString() const{
@@ -21,10 +26,10 @@ std::string Integer::GetType() const{
     return "Integer";
 }
 
-bool Integer::IsEqual(const Getable *value) const{
-    return !value->GetType().compare("Integer") && ((Integer *)value)->GetNumber() == m_data;
+bool Integer::operator==(const Getable &value) const{
+    return !value.GetType().compare("Integer") && ((Integer &)value).ToNative() == m_data;
 }
 
-int Integer::GetNumber(){
+int Integer::ToNative() const{
     return m_data;
 }

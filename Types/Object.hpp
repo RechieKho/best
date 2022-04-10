@@ -3,17 +3,18 @@
 
 #include <vector>
 
-#include "Setable.hpp"
+#include "Getable.hpp"
 #include "Array.hpp"
 #include "Cleaner.hpp"
 
 struct KeyValuePair{
-    Getable *key, *value;
-    KeyValuePair(Getable *key, Getable *value);
+    const Getable *key;
+    Getable *value;
+    KeyValuePair(const Getable *key, Getable *value);
     ~KeyValuePair();
 };
 
-class Object: public Setable{
+class Object: public Getable{
     std::vector<KeyValuePair *> *m_hash_arr;
     int m_hash_arr_size;
 
@@ -22,13 +23,14 @@ public:
     Object();
     Object(int arg, ...);
     ~Object();
-    const Getable *Get(const Getable *key = NULL) const override;
-    void Set(Getable *key, Getable *value) override;
+
+    Getable *Get(const Getable &key) const override;
+    Getable *Copy() const override;
     std::string GetType() const override;
     std::string ToString() const override;
-    bool IsEqual(const Getable *value) const override;
+    bool operator==(const Getable &value) const override;
     
-    Array *GetKeys() const;
+    void Set(const Getable &key, const Getable &value);
 };
 
 #endif

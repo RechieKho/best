@@ -3,23 +3,26 @@
 
 #include <vector>
 
-#include "Setable.hpp"
+#include "Getable.hpp"
 
-class Array: public Setable{
+class Array: public Getable{
     std::vector<Getable*> m_data;
 public:
     Array() = default;
     Array(int n_args,...);
     ~Array();
-    const Getable *Get(const Getable *key = NULL) const override;
-    void Set(Getable *key, Getable *value) override;
+
+    Getable *Get(const Getable &key) const override;
+    Getable *Copy() const override;
     std::string ToString() const override;
     std::string GetType() const override;
-    bool IsEqual(const Getable *value) const override;
+    bool operator==(const Getable &value) const override;
 
+    void Set(const Getable &key, const Getable &value);
     void PushBack(Getable *value);
     void PopBack();
-    bool Contains(Getable *value) const;
+    bool Contains(const Getable &value) const;
+    std::vector<Getable*> ToNative() const;
 };
 
 #endif

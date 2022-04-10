@@ -7,7 +7,7 @@ class Cleanable{
 public:
     void *operator new(size_t size);
     virtual ~Cleanable() = default;
-    int ref_count;
+    mutable int ref_count;
 };
 
 class Cleaner{

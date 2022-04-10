@@ -8,11 +8,13 @@ class Integer: public Getable{
 public:
     Integer();
     Integer(int number);
-    const Getable *Get(const Getable *key = NULL) const override;
+    Getable *Get(const Getable &key) const override;
+    Getable *Copy() const override;
     std::string ToString() const override;
     std::string GetType() const override;
-    bool IsEqual(const Getable *value) const override;
-    int GetNumber();
+    bool operator==(const Getable &value) const override;
+
+    int ToNative() const;
 };
 
 #endif

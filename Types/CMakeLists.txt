@@ -2,7 +2,6 @@ add_library(
     Types
 
     Getable.hpp
-    Setable.hpp
     String.hpp
     String.cpp
     Integer.hpp

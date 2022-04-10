@@ -10,10 +10,13 @@ public:
     String() = default;
     String(std::string text);
 
-    const Getable *Get(const Getable *key = NULL) const override;
+    Getable *Get(const Getable &key) const override;
+    Getable *Copy() const override;
     std::string ToString() const override;
     std::string GetType() const override;
-    bool IsEqual(const Getable *value) const override;
+    bool operator==(const Getable &value) const override;
+    
+    std::string ToNative() const;
 };
 
 #endif

@@ -8,10 +8,11 @@
 int main(){
     Object o;
     std::cout << o.ToString() << std::endl;
-    o.Set(new String(), new Integer(2));
-    o.Set(new Integer(2), new String("NOOOO"));
+    o.Set(String("LOl"), String("OFF"));
+    o.Set(String("SHI"), String("ON"));
     std::cout << o.ToString() << std::endl;
     Cleaner::Flush();
-    o.Set(new Integer(2), new String("YES"));
+    o.Set(Integer(2), String("YES"));
     std::cout << o.ToString() << std::endl;
+    std::cout << (String("s") == String("s")? "Yay": "NOo") << std::endl;
 }

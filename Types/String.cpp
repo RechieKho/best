@@ -6,9 +6,13 @@ String::String(std::string text)
     : m_data(text)
 {}
 
-const Getable *String::Get(const Getable *key) const{
-    if(!key->ToString().compare("length")) return new Integer((int)m_data.length());
+Getable *String::Get(const Getable &key) const{
+    if(!key.ToString().compare("length")) return new Integer((int)m_data.length());
     else return nullptr;
+}
+
+Getable *String::Copy() const{
+    return new String(m_data);
 }
 
 std::string String::ToString() const{
@@ -19,7 +23,11 @@ std::string String::GetType() const{
     return "String";
 }
 
-bool String::IsEqual(const Getable *value) const{
-    return !value->GetType().compare("String") && !m_data.compare(value->ToString());
+bool String::operator==(const Getable &value) const{
+    return !value.GetType().compare("String") && !m_data.compare(value.ToString());
 }
 
+
+std::string String::ToNative() const {
+    return m_data;
+}

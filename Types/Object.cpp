@@ -1,4 +1,5 @@
 #include <cstdarg>
+#include "String.hpp"
 #include "Object.hpp"
 #include "Cleaner.hpp"
 
@@ -7,7 +8,7 @@
 #define MAX_TABLE_SIZE(hash_arr_size) MAX_VECTOR_SIZE*hash_arr_size
 #define EXPANDED_HASH_ARR_SIZE(hash_arr_size) hash_arr_size * 2
 
-KeyValuePair::KeyValuePair(Getable *key, Getable *value): key(key), value(value) {
+KeyValuePair::KeyValuePair(const Getable *key, Getable *value): key(key), value(value) {
     key->ref_count++;
     value->ref_count++;
 }
@@ -58,19 +59,27 @@ Object::~Object(){
 }
 
 
-const Getable *Object::Get(const Getable *key) const {
-    std::vector<KeyValuePair *> &pairs = m_hash_arr[hash(key->ToString(), m_hash_arr_size)];
-    for(const KeyValuePair * const pair: pairs) if(pair->key->IsEqual(key)) return pair->value;
+Getable *Object::Get(const Getable &key) const {
+    std::vector<KeyValuePair *> &pairs = m_hash_arr[hash(key.ToString(), m_hash_arr_size)];
+    for(const KeyValuePair * const pair: pairs) if(*pair->key == key) return pair->value;
     return nullptr;
 }
 
-void Object::Set(Getable *key, Getable *value) {
-    std::vector<KeyValuePair *> &pairs = m_hash_arr[hash(key->ToString(), m_hash_arr_size)];
-    for(KeyValuePair * const pair: pairs) if(pair->key->IsEqual(key)) {
-        pair->value = value; 
+Getable *Object::Copy() const {
+    return new Object(); // TODO
+}
+
+void Object::Set(const Getable &key, const Getable &value) {
+    // copying
+    const Getable *copied_key = key.Copy();
+    Getable *copied_value = value.Copy();
+
+    std::vector<KeyValuePair *> &pairs = m_hash_arr[hash(key.ToString(), m_hash_arr_size)];
+    for(KeyValuePair * const pair: pairs) if(*pair->key == key) {
+        pair->value = copied_value; 
         return;
     }
-    KeyValuePair *pair = new KeyValuePair(key, value);
+    KeyValuePair *pair = new KeyValuePair(copied_key, copied_value);
     pairs.push_back(pair);
 }
 
@@ -102,27 +111,16 @@ std::string Object::ToString() const {
     return repr;
 }
 
-bool Object::IsEqual(const Getable *value) const{
-    if(value->GetType().compare("Object")) return false;
+bool Object::operator==(const Getable &value) const{
+    if(value.GetType().compare("Object")) return false;
     else {
-        Object *o = (Object *)value;
+        const Object &o = (const Object&)value;
         for(int i = 0; i<m_hash_arr_size; i++){
             const std::vector<KeyValuePair *> &pairs = m_hash_arr[i];
-            for(int j = 0; j < pairs.size(); j++) if(o->Get(pairs[j]->key) != pairs[j]->value) return false;
+            for(int j = 0; j < pairs.size(); j++) if(o.Get(*(pairs[j]->key)) != pairs[j]->value) return false;
         }
     }
     return true;
-}
-
-Array *Object::GetKeys() const {
-    Array *a = new Array();
-    for(int i = 0; i<m_hash_arr_size; i++){
-        const std::vector<KeyValuePair *> &pairs = m_hash_arr[i];
-        for(int j = 0; j < pairs.size(); j++){
-            a->PushBack(pairs[j]->key);
-        }
-    }
-    return a;
 }
 
 int Object::hash(std::string text, int max_number) const {
