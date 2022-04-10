@@ -3,31 +3,30 @@
 #include "Cleaner.hpp"
 
 String::String(std::string text)
-    : m_data(text)
+    : str(text)
 {}
 
-Getable *String::Get(const Getable &key) const{
-    if(!key.ToString().compare("length")) return new Integer((int)m_data.length());
+BstObj *String::get(const BstObj &key) const{
+    if(!key.to_string().compare("length")) return new Integer((int)str.length());
     else return nullptr;
 }
 
-Getable *String::Copy() const{
-    return new String(m_data);
+BstObj *String::copy() const{
+    return new String(str);
 }
 
-std::string String::ToString() const{
-    return m_data;
+std::string String::to_string() const{
+    return str;
 }
 
-std::string String::GetType() const{
+std::string String::get_type() const{
     return "String";
 }
 
-bool String::operator==(const Getable &value) const{
-    return !value.GetType().compare("String") && !m_data.compare(value.ToString());
+bool String::operator==(const BstObj &value) const{
+    return !value.get_type().compare("String") && !str.compare(value.to_string());
 }
 
-
-std::string String::ToNative() const {
-    return m_data;
+std::string String::to_native() const {
+    return str;
 }

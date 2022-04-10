@@ -3,29 +3,29 @@
 #include "Cleaner.hpp"
 
 Float::Float(float number)
-    : m_data(number) 
+    : num(number) 
 {}
 
-Getable *Float::Get(const Getable &key) const{
+BstObj *Float::get(const BstObj &key) const{
     return nullptr;
 }
 
-Getable *Float::Copy() const {
-    return new Float(m_data);
+BstObj *Float::copy() const {
+    return new Float(num);
 }
 
-std::string Float::ToString() const{
-    return std::to_string(m_data);
+std::string Float::to_string() const{
+    return std::to_string(num);
 }
 
-std::string Float::GetType() const{
+std::string Float::get_type() const{
     return "Float";
 }
 
-bool Float::operator==(const Getable &value) const{
-    return !value.GetType().compare("Float") && ((Float &)value).ToNative() == m_data;
+bool Float::operator==(const BstObj &value) const{
+    return !value.get_type().compare("Float") && ((Float &)value).to_native() == num;
 }
 
-float Float::ToNative() const {
-    return m_data;
+float Float::to_native() const {
+    return num;
 }

@@ -4,18 +4,18 @@
 
 void *Cleanable::operator new(size_t size){
     void *p = malloc(size);
-    Cleaner::Register((Cleanable *)p);
+    Cleaner::record((Cleanable *)p);
     return p;
 }
 
 std::vector<Cleanable *> Cleaner::items = std::vector<Cleanable *>();
 
-void Cleaner::Register(Cleanable *item){
+void Cleaner::record(Cleanable *item){
     for(int i = 0; i < items.size(); i++) if(items[i] == item) return;
     items.push_back(item);
 }
 
-void Cleaner::Flush(){
+void Cleaner::flush(){
     for(int i = 0; i<items.size(); i++){
         Cleanable *item = items[i];
         if(!item->ref_count) {

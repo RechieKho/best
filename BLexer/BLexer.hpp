@@ -16,8 +16,7 @@ struct TokenTextPair
 
 class BLexer{
 public:
-    // static std::vector<TokenTextPair> GetTokensFromFile(std::string text);
-    static std::vector<TokenTextPair> GetTokens(std::string text);
+    static std::vector<TokenTextPair> get_tokens(std::string text);
 };
 
 #endif

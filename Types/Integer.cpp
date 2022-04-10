@@ -3,33 +3,33 @@
 #include "Cleaner.hpp"
 
 Integer::Integer()
-    : m_data(0)
+    : num(0)
 {}
 
 Integer::Integer(int number)
-    : m_data(number) 
+    : num(number) 
 {}
 
-Getable *Integer::Get(const Getable &key) const{
+BstObj *Integer::get(const BstObj &key) const{
     return nullptr;
 }
 
-Getable *Integer::Copy() const {
-    return new Integer(m_data);
+BstObj *Integer::copy() const {
+    return new Integer(num);
 }
 
-std::string Integer::ToString() const{
-    return std::to_string(m_data);
+std::string Integer::to_string() const{
+    return std::to_string(num);
 }
 
-std::string Integer::GetType() const{
+std::string Integer::get_type() const{
     return "Integer";
 }
 
-bool Integer::operator==(const Getable &value) const{
-    return !value.GetType().compare("Integer") && ((Integer &)value).ToNative() == m_data;
+bool Integer::operator==(const BstObj &value) const{
+    return !value.get_type().compare("Integer") && ((Integer &)value).to_native() == num;
 }
 
-int Integer::ToNative() const{
-    return m_data;
+int Integer::to_native() const{
+    return num;
 }

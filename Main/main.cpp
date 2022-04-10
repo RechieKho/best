@@ -7,12 +7,12 @@
 
 int main(){
     Object o;
-    std::cout << o.ToString() << std::endl;
-    o.Set(String("LOl"), String("OFF"));
-    o.Set(String("SHI"), String("ON"));
-    std::cout << o.ToString() << std::endl;
-    Cleaner::Flush();
-    o.Set(Integer(2), String("YES"));
-    std::cout << o.ToString() << std::endl;
-    std::cout << (String("s") == String("s")? "Yay": "NOo") << std::endl;
+    std::cout << o.to_string() << std::endl;
+    o.set(STR("LOl"), STR());
+    o.set(STR("SHI"), STR("ON"));
+    std::cout << o.to_string() << std::endl;
+    Cleaner::flush();
+    o.set(INT(2), STR("YES"));
+    std::cout << o.to_string() << std::endl;
+    std::cout << (STR("s") == STR("s")? "Yay": "NOo") << std::endl;
 }

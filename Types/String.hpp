@@ -1,22 +1,24 @@
 #ifndef STRING_H
 #define STRING_H
 
-#include "Getable.hpp"
+#define STR(t) String(t)
 
-class String: public Getable
+#include "BstObj.hpp"
+
+class String: public BstObj
 {
-    std::string m_data;
+    std::string str;
 public:
     String() = default;
     String(std::string text);
 
-    Getable *Get(const Getable &key) const override;
-    Getable *Copy() const override;
-    std::string ToString() const override;
-    std::string GetType() const override;
-    bool operator==(const Getable &value) const override;
+    BstObj *get(const BstObj &key) const override;
+    BstObj *copy() const override;
+    std::string to_string() const override;
+    std::string get_type() const override;
+    bool operator==(const BstObj &value) const override;
     
-    std::string ToNative() const;
+    std::string to_native() const;
 };
 
 #endif

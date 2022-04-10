@@ -12,7 +12,7 @@ enum LexMode{
     COMMENT,
 };
 
-std::vector<TokenTextPair> BLexer::GetTokens(std::string text){
+std::vector<TokenTextPair> BLexer::get_tokens(std::string text){
     std::vector<TokenTextPair> pairs;
     LexMode lex_mode = NORMAL;
     BToken current_word_token = BToken::WORD;

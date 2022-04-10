@@ -14,8 +14,8 @@ class Cleaner{
     static std::vector<Cleanable *> items;
 public:
     
-    static void Register(Cleanable *item);
-    static void Flush();
+    static void record(Cleanable *item);
+    static void flush();
     
 };
 
