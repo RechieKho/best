@@ -58,7 +58,7 @@ Object::~Object(){
 }
 
 
-Getable *Object::Get(Getable *key) const {
+const Getable *Object::Get(const Getable *key) const {
     std::vector<KeyValuePair *> &pairs = m_hash_arr[hash(key->ToString(), m_hash_arr_size)];
     for(const KeyValuePair * const pair: pairs) if(pair->key->IsEqual(key)) return pair->value;
     return nullptr;
@@ -102,7 +102,7 @@ std::string Object::ToString() const {
     return repr;
 }
 
-bool Object::IsEqual(Getable *value) const{
+bool Object::IsEqual(const Getable *value) const{
     if(value->GetType().compare("Object")) return false;
     else {
         Object *o = (Object *)value;

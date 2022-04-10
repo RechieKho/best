@@ -22,11 +22,11 @@ public:
     Object();
     Object(int arg, ...);
     ~Object();
-    Getable *Get(Getable *key = NULL) const override;
+    const Getable *Get(const Getable *key = NULL) const override;
     void Set(Getable *key, Getable *value) override;
     std::string GetType() const override;
     std::string ToString() const override;
-    bool IsEqual(Getable *value) const override;
+    bool IsEqual(const Getable *value) const override;
     
     Array *GetKeys() const;
 };

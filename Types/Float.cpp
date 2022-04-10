@@ -5,7 +5,7 @@ Float::Float(float number)
     : m_data(number) 
 {}
 
-Getable *Float::Get(Getable *key) const{
+const Getable *Float::Get(const Getable *key) const{
     return nullptr;
 }
 
@@ -21,6 +21,6 @@ float Float::GetNumber(){
     return m_data;
 }
 
-bool Float::IsEqual(Getable *value) const{
+bool Float::IsEqual(const Getable *value) const{
     return !value->GetType().compare("Float") && ((Float *)value)->GetNumber() == m_data;
 }

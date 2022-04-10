@@ -8,11 +8,11 @@ class Float: public Getable{
 public:
     Float() = default;
     Float(float number);
-    Getable *Get(Getable *key = NULL) const override;
+    const Getable *Get(const Getable *key = NULL) const override;
     std::string ToString() const override;
     std::string GetType() const override;
     float GetNumber();
-    bool IsEqual(Getable *value) const override;
+    bool IsEqual(const Getable *value) const override;
 };
 
 #endif

@@ -22,7 +22,7 @@ Array::~Array(){
     Cleaner::Flush();
 }
 
-Getable *Array::Get(Getable *key) const{
+const Getable *Array::Get(const Getable *key) const{
     // checks
     if(key->GetType().compare("Integer")){
         return NULL; // print error message
@@ -64,7 +64,7 @@ std::string Array::GetType() const{
     return "Array";
 }
 
-bool Array::IsEqual(Getable *value) const{
+bool Array::IsEqual(const Getable *value) const{
     return !value->GetType().compare("Array") && ((Array *)value)->m_data == m_data;
 }
 

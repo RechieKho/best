@@ -9,7 +9,7 @@ Integer::Integer(int number)
     : m_data(number) 
 {}
 
-Getable *Integer::Get(Getable *key) const{
+const Getable *Integer::Get(const Getable *key) const{
     return nullptr;
 }
 
@@ -21,7 +21,7 @@ std::string Integer::GetType() const{
     return "Integer";
 }
 
-bool Integer::IsEqual(Getable *value) const{
+bool Integer::IsEqual(const Getable *value) const{
     return !value->GetType().compare("Integer") && ((Integer *)value)->GetNumber() == m_data;
 }
 
