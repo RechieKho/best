@@ -9,12 +9,10 @@ class Float: public BstObj{
     float num;
 public:
     Float() = default;
-    Float(float number);
+    Float(const float &number);
 
+    BstObj *get() const override;
     BstObj *get(const BstObj &key) const override;
-    BstObj *copy() const override;
-    std::string to_string() const override;
-    std::string get_type() const override;
     bool operator==(const BstObj &value) const override;
 
     float to_native() const;

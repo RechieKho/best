@@ -23,23 +23,54 @@ List::~List(){
     Cleaner::flush();
 }
 
-BstObj *List::get(const BstObj &key) const{
-    // checks
-    if(key.get_type().compare("Integer")){
-        return nullptr; // print error message
-    }
-    return lst[((Integer &)key).to_native()];
+BstObj *List::get() const {
+    return new STR("List");
 }
 
-BstObj *List::copy() const {
-    return new List(); // TODO
+BstObj *List::get(const BstObj &key) const{
+    const BstObj *key_type = key.get();
+
+    if(*key_type == STR("Integer")) {
+        delete key_type;
+        return lst[((Integer &)key).to_native()];
+    }
+    else if(*key_type == STR("String")){
+        delete key_type;
+        const String& str_key = (const String&) key;
+
+        if(str_key == STR("copy")) {
+            return new List(); // TODO
+        }
+        else if (str_key == STR("to_string")){
+            std::string repr = "[";
+            int size = lst.size();
+            for(int i = 0; i < size; i++){
+                BstObj *e = lst[i];
+                const String *e_type = (const String *)e->get();
+                const String *e_string = (const String *)e->get(STR("to_string"));
+                const std::string e_string_native = e_string->to_native();
+                if(e_type->to_native() == "String") repr += "'" + e_string_native + "'";
+                else repr += e_string_native;
+                delete e_type;
+                delete e_string;
+                if(i < size - 1) repr += ", ";
+            }
+            repr += "]";
+            return new STR(repr);
+        }
+    }
+    
+    return nullptr;
 }
 
 void List::set(const BstObj &key, const BstObj &value){
+    const String *tmp = (const String *)key.get();
+    const std::string key_type = tmp->to_native();
+    delete tmp;
     int index;
 
     // checks
-    if(key.get_type().compare("Integer")){
+    if(key_type != "Integer"){
         return; // print error message
     } 
     else if((index = ((Integer &)key).to_native()) < lst.size()){
@@ -47,32 +78,18 @@ void List::set(const BstObj &key, const BstObj &value){
     }
     else if (lst[index] == &value) return;
 
-    BstObj *copied_value = value.copy();
+    BstObj *copied_value = value.get(STR("copy"));
 
     lst[index]->ref_count--;
     copied_value->ref_count++;
     lst[index] = copied_value;
 }
 
-std::string List::to_string() const{
-    std::string repr = "[";
-    int size = lst.size();
-    for(int i = 0; i < size; i++){
-        BstObj *e = lst[i];
-        if(!e->get_type().compare("String")) repr += "'" + e->to_string() + "'";
-        else repr += e->to_string();
-        if(i < size - 1) repr += ", ";
-    }
-    repr += "]";
-    return repr;
-}
-
-std::string List::get_type() const{
-    return "List";
-}
-
 bool List::operator==(const BstObj &value) const{
-    return !value.get_type().compare("List") && ((List &)value).lst == lst;
+    const String *tmp = (const String *)value.get();
+    const bool is_list = *tmp == STR("List");
+    delete tmp;
+    return is_list && ((List &)value).lst == lst;
 }
 
 void List::push_back(BstObj *value){

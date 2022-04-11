@@ -7,12 +7,7 @@
 #include "List.hpp"
 #include "Cleaner.hpp"
 
-struct KeyValuePair{
-    const BstObj *key;
-    BstObj *value;
-    KeyValuePair(const BstObj *key, BstObj *value);
-    ~KeyValuePair();
-};
+struct KeyValuePair;
 
 class Object: public BstObj{
     std::vector<KeyValuePair *> *table;
@@ -21,13 +16,11 @@ class Object: public BstObj{
     int hash(std::string text, int max_number) const;
 public:
     Object();
-    Object(int arg, ...);
+    // Object(int arg, ...);
     ~Object();
 
+    BstObj *get() const override;
     BstObj *get(const BstObj &key) const override;
-    BstObj *copy() const override;
-    std::string get_type() const override;
-    std::string to_string() const override;
     bool operator==(const BstObj &value) const override;
     
     void set(const BstObj &key, const BstObj &value);

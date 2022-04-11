@@ -10,14 +10,16 @@ class String: public BstObj
     std::string str;
 public:
     String() = default;
-    String(std::string text);
+    String(const std::string &text);
+    String(const char *text);
 
+    BstObj *get() const override;
     BstObj *get(const BstObj &key) const override;
-    BstObj *copy() const override;
-    std::string to_string() const override;
-    std::string get_type() const override;
     bool operator==(const BstObj &value) const override;
     
+    bool operator==(const String &value);
+    String operator+(const String &value);
+    String &operator+=(const String &value);
     std::string to_native() const;
 };
 

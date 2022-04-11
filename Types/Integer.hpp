@@ -10,10 +10,9 @@ class Integer: public BstObj{
 public:
     Integer();
     Integer(int number);
+
+    BstObj *get() const override;
     BstObj *get(const BstObj &key) const override;
-    BstObj *copy() const override;
-    std::string to_string() const override;
-    std::string get_type() const override;
     bool operator==(const BstObj &value) const override;
 
     int to_native() const;

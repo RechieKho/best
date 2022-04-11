@@ -6,6 +6,7 @@
 class Cleanable{
 public:
     void *operator new(size_t size);
+    void operator delete(void *p);
     virtual ~Cleanable() = default;
     mutable int ref_count;
 };
@@ -15,6 +16,7 @@ class Cleaner{
 public:
     
     static void record(Cleanable *item);
+    static void unrecord(Cleanable *item);
     static void flush();
     
 };

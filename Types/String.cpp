@@ -2,29 +2,49 @@
 #include "Integer.hpp"
 #include "Cleaner.hpp"
 
-String::String(std::string text)
+String::String(const std::string& text)
     : str(text)
 {}
 
+String::String(const char *text)
+    : str(text)
+{}
+
+BstObj *String::get() const {
+    return new STR("String");
+}
+
 BstObj *String::get(const BstObj &key) const{
-    if(!key.to_string().compare("length")) return new Integer((int)str.length());
-    else return nullptr;
-}
+    const BstObj *key_type = key.get();
+    bool is_not_str = *key_type != STR("String");
+    delete key_type;
+    if(is_not_str) return nullptr;
 
-BstObj *String::copy() const{
-    return new String(str);
-}
+    std::string str_key = ((const String&)key).to_native();
 
-std::string String::to_string() const{
-    return str;
-}
+    if(str_key == "copy" || str_key == "to_string") return new STR(str);
 
-std::string String::get_type() const{
-    return "String";
+    return nullptr;
 }
 
 bool String::operator==(const BstObj &value) const{
-    return !value.get_type().compare("String") && !str.compare(value.to_string());
+    const String *type = (const String *)value.get();
+    const bool is_str = type->to_native() == "String";
+    delete type;
+    return is_str && ((const String &)value).str == str;
+}
+
+bool String::operator==(const String &value){
+    return value.str == str;
+}
+
+String String::operator+(const String &value){
+    return STR(str + value.str);
+}
+
+String &String::operator+=(const String &value){
+    str += value.str;
+    return *this;
 }
 
 std::string String::to_native() const {

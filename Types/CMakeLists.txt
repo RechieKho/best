@@ -2,6 +2,7 @@ add_library(
     Types
 
     BstObj.hpp
+    BstObj.cpp
     String.hpp
     String.cpp
     Integer.hpp

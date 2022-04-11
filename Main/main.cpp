@@ -1,4 +1,5 @@
 #include <iostream>
+#include "BstObj.hpp"
 #include "Integer.hpp"
 #include "String.hpp"
 #include "Float.hpp"
@@ -7,12 +8,8 @@
 
 int main(){
     Object o;
-    std::cout << o.to_string() << std::endl;
-    o.set(STR("LOl"), STR());
-    o.set(STR("SHI"), STR("ON"));
-    std::cout << o.to_string() << std::endl;
-    Cleaner::flush();
-    o.set(INT(2), STR("YES"));
-    std::cout << o.to_string() << std::endl;
-    std::cout << (STR("s") == STR("s")? "Yay": "NOo") << std::endl;
+    o.set(STR("NO"), STR("string key."));
+    o.set(INT(2), STR("integer key."));
+    o.set(FLT(3.5), STR("This is hell"));
+    std::cout << o << std::endl;
 }

@@ -12,10 +12,8 @@ public:
     List(int n_args,...);
     ~List();
 
+    BstObj *get() const override;
     BstObj *get(const BstObj &key) const override;
-    BstObj *copy() const override;
-    std::string to_string() const override;
-    std::string get_type() const override;
     bool operator==(const BstObj &value) const override;
 
     void set(const BstObj &key, const BstObj &value);
