@@ -22,7 +22,7 @@ BstObj *String::get(const BstObj &key) const{
 
     std::string str_key = ((const String&)key).to_native();
 
-    if(str_key == "copy" || str_key == "to_string") return new STR(str);
+    if(str_key == "@copy" || str_key == "@to_string") return new STR(str);
 
     return nullptr;
 }
@@ -32,10 +32,6 @@ bool String::operator==(const BstObj &value) const{
     const bool is_str = type->to_native() == "String";
     delete type;
     return is_str && ((const String &)value).str == str;
-}
-
-bool String::operator==(const String &value){
-    return value.str == str;
 }
 
 String String::operator+(const String &value){

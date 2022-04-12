@@ -19,8 +19,8 @@ BstObj *Float::get(const BstObj &key) const{
 
     std::string str_key = ((const String&)key).to_native();
 
-    if(str_key == "copy") return new FLT(num);
-    else if(str_key == "to_string") return new STR(std::to_string(num));
+    if(str_key == "@copy") return new FLT(num);
+    else if(str_key == "@to_string") return new STR(std::to_string(num));
 
     return nullptr;
 }

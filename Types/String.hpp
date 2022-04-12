@@ -17,7 +17,6 @@ public:
     BstObj *get(const BstObj &key) const override;
     bool operator==(const BstObj &value) const override;
     
-    bool operator==(const String &value);
     String operator+(const String &value);
     String &operator+=(const String &value);
     std::string to_native() const;

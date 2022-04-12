@@ -3,12 +3,20 @@
 #include <iostream>
 
 void *Cleanable::operator new(size_t size){
+    // static int count = 0;
+    // count++;
+    // std::cout << "Cleanable Start, count: " << count << std::endl;
+    
     void *p = malloc(size);
     Cleaner::record((Cleanable *)p);
     return p;
 }
 
 void Cleanable::operator delete(void *p){
+    // static int count = 0;
+    // count ++;
+    // std::cout << "Cleanable End, count: " << count << std::endl;
+
     free(p);
     Cleaner::unrecord((Cleanable *)p);
 }
