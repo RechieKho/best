@@ -10,13 +10,12 @@
 struct KeyValuePair;
 
 class Object: public BstObj{
-    std::vector<KeyValuePair *> *table;
-    int table_size;
+    std::vector<KeyValuePair *> *arr;
+    int arr_size;
 
     int hash(std::string text, int max_number) const;
 public:
-    Object();
-    // Object(int arg, ...);
+    Object(int pair_count = 30);
     ~Object();
 
     BstObj *get() const override;
